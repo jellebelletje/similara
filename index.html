@@ -230,6 +230,11 @@
                 apiKeyContainer.classList.add('hidden');
             }
             
+            // Reset scores on mode switch to prevent mixing Literal and AI progress
+            previousScore = null;
+            previousMode = null;
+            prevScoreContainer.classList.add('hidden');
+            
             renderEmptyState();
         }
 
@@ -319,7 +324,7 @@
             const currentScoreText = similarityDisplay.innerText.replace('%', '');
             const currentScoreVal = parseInt(currentScoreText);
             
-            // If the current score is not 0 (meaning a comparison was already made), show it as Previous
+            // If the current score is not 0 (meaning a comparison was already made in this session/mode), show it as Previous
             if (currentScoreVal > 0) {
                 previousScore = currentScoreVal;
                 previousMode = modeBadge.innerText.includes('AI') ? 'ai' : 'literal';
@@ -396,7 +401,6 @@
             viewToggle.classList.add('hidden');
             errorMessage.classList.add('hidden');
             aiFeedbackBox.classList.add('hidden');
-            // We keep the Previous Score visible to show progress between attempts
         }
 
         window.onload = () => {
