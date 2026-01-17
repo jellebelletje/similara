@@ -31,7 +31,7 @@
         <div>
             <div class="flex items-center gap-2">
                 <h1 class="text-3xl font-800 text-slate-900 tracking-tight">Similara</h1>
-                <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-1 rounded uppercase">v2.5</span>
+                <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-1 rounded uppercase">v2.6</span>
             </div>
             <p id="ui-subtitle" class="text-slate-500">Vergelijk tekstovereenkomst op basis van woorden of betekenis.</p>
         </div>
@@ -67,7 +67,7 @@
     </div>
 
     <!-- Main Comparison Area -->
-    <main class="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <main class="flex-grow grid grid-cols-1 lg:min-h-0 lg:grid-cols-2 gap-6">
         <div class="flex flex-col gap-2">
             <label id="ui-sourceLabel" class="font-bold text-slate-600 ml-1 uppercase text-[10px] tracking-widest">Originele Bron (Het Doel)</label>
             <textarea id="sourceInput" class="w-full flex-grow min-h-[300px] lg:min-h-full p-5 rounded-2xl border-2 border-slate-100 shadow-sm focus:ring-4 focus:ring-indigo-50 focus:border-indigo-500 outline-none resize-none transition-all text-slate-700 leading-relaxed" placeholder="Plak de mastertekst hier..."></textarea>
@@ -110,6 +110,8 @@
         let previousScore = null;
         let previousMode = null;
 
+        const linkedInIcon = `<a href="https://www.linkedin.com/in/jelmar/" target="_blank" class="inline-block ml-0.5 align-middle text-slate-400 hover:text-[#0077b5] transition-colors" title="LinkedIn"><svg class="w-3 h-3 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>`;
+
         const translations = {
             nl: {
                 subtitle: "Vergelijk tekstovereenkomst op basis van woorden of betekenis.",
@@ -133,7 +135,7 @@
                 feedbackTitle: "AI Feedback",
                 prevScoreLabel: "Vorige score",
                 errorMsg: "Controleer je API-sleutel en probeer het opnieuw.",
-                footerCredits: "Gemaakt door <strong>Jelmar Groot</strong> en gepubliceerd onder de <strong>MIT-licentie</strong>. Dit betekent dat je de software vrij mag gebruiken, kopiëren, aanpassen en verspreiden (ook commercieel), mits de bronvermelding behouden blijft."
+                footerCredits: `Gemaakt door <strong>Jelmar Groot</strong>${linkedInIcon} en gepubliceerd onder de <strong>MIT-licentie</strong>. Dit betekent dat je de software vrij mag gebruiken, kopiëren, aanpassen en verspreiden (ook commercieel), mits de bronvermelding behouden blijft.`
             },
             en: {
                 subtitle: "Compare text similarity by words or by meaning.",
@@ -157,7 +159,7 @@
                 feedbackTitle: "AI Feedback",
                 prevScoreLabel: "Previous score",
                 errorMsg: "Check your API key and try again.",
-                footerCredits: "Built by <strong>Jelmar Groot</strong> and published under an <strong>MIT license</strong>. This means you are free to use, copy, modify, and distribute this software for any purpose, as long as the original attribution is included."
+                footerCredits: `Built by <strong>Jelmar Groot</strong>${linkedInIcon} and published under an <strong>MIT license</strong>. This means you are free to use, copy, modify, and distribute this software for any purpose, as long as the original attribution is included.`
             }
         };
         
@@ -230,7 +232,6 @@
                 apiKeyContainer.classList.add('hidden');
             }
             
-            // Reset scores on mode switch to prevent mixing Literal and AI progress
             previousScore = null;
             previousMode = null;
             prevScoreContainer.classList.add('hidden');
@@ -320,11 +321,9 @@
             const t = translations[currentLang];
             if (!s1 || !s2) return;
 
-            // Capture current displayed score to update Previous Score UI
             const currentScoreText = similarityDisplay.innerText.replace('%', '');
             const currentScoreVal = parseInt(currentScoreText);
             
-            // If the current score is not 0 (meaning a comparison was already made in this session/mode), show it as Previous
             if (currentScoreVal > 0) {
                 previousScore = currentScoreVal;
                 previousMode = modeBadge.innerText.includes('AI') ? 'ai' : 'literal';
